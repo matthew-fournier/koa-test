@@ -1,0 +1,28 @@
+{
+  "name": "koatest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "esm": "^3.2.25",
+    "koa": "^2.13.4",
+    "koa-router": "^10.1.1",
+    "nodemon": "^2.0.18"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon esm index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matthew-fournier/koa-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matthew-fournier/koa-test/issues"
+  },
+  "homepage": "https://github.com/matthew-fournier/koa-test#readme"
+}
