@@ -21,6 +21,7 @@ app.use(router.allowedMethods())
 router.get('/', koaBodyMiddleware, (ctx) => { GetRouteList(ctx) })
 router.get('/allUsers', koaBodyMiddleware, (ctx) => { GetAllUsers(ctx) })
 router.get('/user/:userID', koaBodyMiddleware, (ctx) => { GetUserById(ctx) })
+router.get('/user/:userID/friends', koaBodyMiddleware, (ctx) => { GetUserFriends(ctx) })
 
 // POST
 router.post('/createUsers', koaBodyMiddleware, (ctx) => { PostCreateUsers(ctx) })
