@@ -7,7 +7,7 @@ import GetAllUsers from './routes/GetAllUsers.js'
 import GetRouteList from './routes/GetRouteList.js'
 import GetUserById from './routes/GetUserById.js'
 import PostCreateUsers from './routes/PostCreateUsers.js'
-import PostUserById from './routes/PostUserById copy.js'
+import PostUserById from './routes/PostUserById.js'
 
 // Init Koa
 const app = new Koa()
