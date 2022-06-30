@@ -8,6 +8,7 @@ import GetRouteList from './routes/GetRouteList.js'
 import GetUserById from './routes/GetUserById.js'
 import PostCreateUsers from './routes/PostCreateUsers.js'
 import PostUserById from './routes/PostUserById.js'
+import PostUserFriends from './routes/PostUserFriends.js'
 
 // Init Koa
 const app = new Koa()
@@ -26,6 +27,7 @@ router.get('/user/:userID/friends', koaBodyMiddleware, (ctx) => { GetUserFriends
 // POST
 router.post('/createUsers', koaBodyMiddleware, (ctx) => { PostCreateUsers(ctx) })
 router.post('/user/:userID', koaBodyMiddleware, (ctx) => { PostUserById(ctx) })
+router.post('/user/:userID/friends', koaBodyMiddleware, (ctx) => { PostUserFriends(ctx) })
 
 // DELETE
 router.delete('/allUsers', koaBodyMiddleware, (ctx) => { DeleteAllUsers(ctx) })
