@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs'
+import fs from 'fs'
 import errorResponse from "../helpers/errorResponse.js"
 
 const PostCreateUsers = async (ctx) => {
@@ -13,12 +13,17 @@ const PostCreateUsers = async (ctx) => {
       throw Error('numberOfUsers has a max value of 15')
     }
 
+    const usersDatabase = JSON.parse(fs.readFileSync('./database/users.json'))
+    const indexAdjust = usersDatabase.length === 0
+      ? 0
+      : usersDatabase[usersDatabase.length - 1].id + 1
+
     const newUsers = await Promise.allSettled(
       [...Array(parseInt(numberOfUsers, 10)).keys()]
         .map(async (user, index) => {
           return {
-            id: index,
-            name:  `Name ${index}`
+            id: index + indexAdjust,
+            name:  `Name ${index + indexAdjust}`
           }
         })
     ).then((users) => {
@@ -27,10 +32,10 @@ const PostCreateUsers = async (ctx) => {
         .map(newUser => newUser.value)
     })
 
+    const updatedUsersDatabase = usersDatabase.concat(newUsers)
+    fs.writeFileSync('./database/users.json', JSON.stringify(updatedUsersDatabase, null, 4))
 
-    fs.writeFile('../database.json', JSON.stringify(newUsers))
-
-    ctx.body = newUsers
+    ctx.body = updatedUsersDatabase
   } catch(err) {
     errorResponse(ctx, err)
   }
