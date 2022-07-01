@@ -21,7 +21,7 @@ const PostUserById = async (ctx) => {
 
     ctx.body = userToUpdate
   } catch(err) {
-    console.log(err)
+    console.error(err)
     errorResponse(ctx, err)
   }
 }

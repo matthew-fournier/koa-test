@@ -1,5 +1,6 @@
-import fs from 'fs'
+
 import errorResponse from "../helpers/errorResponse.js"
+import { readDatabase, writeDatabase } from "../helpers/fsDatabase.js"
 
 const PostUserFriends = async (ctx) => {
   try {
@@ -7,8 +8,8 @@ const PostUserFriends = async (ctx) => {
     if (!friendId) { throw Error ('Missing friendId from body')}
 
 
-    const usersDatabase = JSON.parse(fs.readFileSync('./database/users.json'))
-    const friendsDatabase = JSON.parse(fs.readFileSync('./database/friends.json'))
+    const usersDatabase = readDatabase('users')
+    const friendsDatabase = readDatabase('friends')
     const userLookupID = Number(ctx.params.userID)
 
     const matchedUser = usersDatabase.find(user => user.id === userLookupID)
@@ -39,11 +40,11 @@ const PostUserFriends = async (ctx) => {
     friendsDatabase.push(newFriendship)
 
     friendsDatabase.push()
-    fs.writeFileSync('./database/friends.json', JSON.stringify(friendsDatabase, null, 4))
+    writeDatabase('friends', friendsDatabase)
 
     ctx.body = newFriendship
   } catch(err) {
-    console.log(err)
+    console.error(err)
     errorResponse(ctx, err)
   }
 }

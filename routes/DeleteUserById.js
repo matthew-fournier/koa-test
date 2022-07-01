@@ -20,7 +20,7 @@ const DeleteUserById = async (ctx) => {
 
     ctx.body = userToDelete
   } catch(err) {
-    console.log(err)
+    console.error(err)
     errorResponse(ctx, err)
   }
 }
