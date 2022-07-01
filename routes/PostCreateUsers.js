@@ -1,11 +1,14 @@
 import axios from 'axios'
-import fs from 'fs'
-import errorResponse from "../helpers/errorResponse.js"
 import { readDatabase, writeDatabase } from "../helpers/fsDatabase.js"
 
 const PostCreateUsers = async (ctx, next) => {
   const { numberOfUsers } = ctx.request.body
-  if (typeof numberOfUsers === 'undefined' || !numberOfUsers || Number(numberOfUsers) > 15) {
+  if (
+    typeof numberOfUsers === 'undefined' ||
+    !numberOfUsers ||
+    Number(numberOfUsers) > 15
+    || Number(numberOfUsers) < 1
+  ) {
     throw Error('numberOfUsers must be a number from 1 - 15')
   }
 
