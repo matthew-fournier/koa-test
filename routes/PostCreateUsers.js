@@ -15,7 +15,7 @@ const PostCreateUsers = async (ctx, next) => {
     : usersDatabase[usersDatabase.length - 1].id + 1
 
   const newUsersResponse = await Promise.allSettled(
-    [...Array(parseInt(numberOfUsers, 10)).keys()]
+    [...Array(Number(numberOfUsers)).keys()]
       .map(async (user, index) => {
         const resRandomData = await axios.get('https://randomuser.me/api/')
         const randomData = resRandomData.data?.results[0]

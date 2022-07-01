@@ -14,35 +14,30 @@ import PostUserFriends from './routes/PostUserFriends.js'
 // Init Koa
 const app = new Koa()
 const router = new Router()
-const koaBodyMiddleware = koaBody({ multipart: true })
 
-
-
+// Init Middleware
 app.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch (err) {
-    errorResponse(ctx, err)
-  }
-});
-app.use(koaBodyMiddleware)
+  try { await next() }
+  catch (err) {errorResponse(ctx, err) }
+})
+app.use(koaBody({ multipart: true }))
 app.use(router.routes())
 app.use(router.allowedMethods())
 
 // GET
-router.get('/', koaBodyMiddleware, (ctx) => { GetRouteList(ctx) })
-router.get('/users', koaBodyMiddleware, (ctx) => { GetAllUsers(ctx) })
-router.get('/user/:userID', koaBodyMiddleware, (ctx) => { GetUserById(ctx) })
-router.get('/user/:userID/friends', koaBodyMiddleware, (ctx) => { GetUserFriends(ctx) })
+router.get('/', (ctx, next) => { GetRouteList(ctx) })
+router.get('/users', (ctx, next) => { GetAllUsers(ctx) })
+router.get('/user/:userID', (ctx, next) => { GetUserById(ctx) })
+router.get('/user/:userID/friends', (ctx, next) => { GetUserFriends(ctx) })
 
 // POST
-router.post('/users', async (ctx, next) => { PostCreateUsers(ctx) })
-router.post('/user/:userID', koaBodyMiddleware, (ctx) => { PostUserById(ctx) })
-router.post('/user/:userID/friends', koaBodyMiddleware, (ctx) => { PostUserFriends(ctx) })
+router.post('/users', async (ctx, next) => { PostCreateUsers(ctx, next) })
+router.post('/user/:userID', (ctx, next) => { PostUserById(ctx) })
+router.post('/user/:userID/friends', (ctx, next) => { PostUserFriends(ctx) })
 
 // DELETE
-router.delete('/users', koaBodyMiddleware, (ctx) => { DeleteAllUsers(ctx) })
-router.delete('/user/:userID', koaBodyMiddleware, (ctx) => { DeleteUserById(ctx) })
+router.delete('/users', (ctx, next) => { DeleteAllUsers(ctx) })
+router.delete('/user/:userID', (ctx, next) => { DeleteUserById(ctx) })
 
 // Run API Routes
 const port = 3000
