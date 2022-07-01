@@ -1,13 +1,9 @@
 import fs from 'fs'
-import errorResponse from "../helpers/errorResponse.js"
+import { readDatabase } from "../helpers/fsDatabase.js"
 
-const GetAllUsers = async (ctx) => {
-  try {
-    const usersDatabase = JSON.parse(fs.readFileSync('./database/users.json'))
-    ctx.body = usersDatabase
-  } catch(err) {
-    errorResponse(ctx, err)
-  }
+const GetAllUsers = (ctx) => {
+  const usersDatabase = readDatabase('users')
+  ctx.body = usersDatabase
 }
 
 export default GetAllUsers

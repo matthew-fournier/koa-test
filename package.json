@@ -16,7 +16,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon esm index.js"
+    "start": "nodemon esm index.js --ignore 'database/*.json'"
   },
   "repository": {
     "type": "git",

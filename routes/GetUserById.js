@@ -1,9 +1,8 @@
 import fs from 'fs'
-import errorResponse from "../helpers/errorResponse.js"
+import { readDatabase, writeDatabase } from "../helpers/fsDatabase.js"
 
-const GetUserById = async (ctx) => {
-  try {
-    const usersDatabase = JSON.parse(fs.readFileSync('./database/users.json'))
+const GetUserById = (ctx) => {
+    const usersDatabase = readDatabase('users')
     const userLookupID = Number(ctx.params.userID)
     const matchedUser = usersDatabase.find(user => user.id === userLookupID)
 
@@ -12,9 +11,6 @@ const GetUserById = async (ctx) => {
     }
 
     ctx.body = matchedUser
-  } catch(err) {
-    errorResponse(ctx, err)
-  }
 }
 
 export default GetUserById

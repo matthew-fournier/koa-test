@@ -1,44 +1,44 @@
+import axios from 'axios'
 import fs from 'fs'
 import errorResponse from "../helpers/errorResponse.js"
+import { readDatabase, writeDatabase } from "../helpers/fsDatabase.js"
 
-const PostCreateUsers = async (ctx) => {
-  try {
-    const { numberOfUsers } = ctx.request.body
-
-    if (typeof numberOfUsers === 'undefined' || !numberOfUsers) {
-      throw Error('numberOfUsers is undefined or null')
-    }
-
-    if (parseInt(numberOfUsers, 10) > 15) {
-      throw Error('numberOfUsers has a max value of 15')
-    }
-
-    const usersDatabase = JSON.parse(fs.readFileSync('./database/users.json'))
-    const indexAdjust = usersDatabase.length === 0
-      ? 0
-      : usersDatabase[usersDatabase.length - 1].id + 1
-
-    const newUsers = await Promise.allSettled(
-      [...Array(parseInt(numberOfUsers, 10)).keys()]
-        .map(async (user, index) => {
-          return {
-            id: index + indexAdjust,
-            name:  `Name ${index + indexAdjust}`
-          }
-        })
-    ).then((users) => {
-      return users
-        .filter(newUser => newUser.status === 'fulfilled')
-        .map(newUser => newUser.value)
-    })
-
-    const updatedUsersDatabase = usersDatabase.concat(newUsers)
-    fs.writeFileSync('./database/users.json', JSON.stringify(updatedUsersDatabase, null, 4))
-
-    ctx.body = updatedUsersDatabase
-  } catch(err) {
-    errorResponse(ctx, err)
+const PostCreateUsers = async (ctx, next) => {
+  const { numberOfUsers } = ctx.request.body
+  if (typeof numberOfUsers === 'undefined' || !numberOfUsers || Number(numberOfUsers) > 15) {
+    throw Error('numberOfUsers must be a number from 1 - 15')
   }
+
+  const usersDatabase = readDatabase('users')
+  const indexAdjust = usersDatabase.length === 0
+    ? 0
+    : usersDatabase[usersDatabase.length - 1].id + 1
+
+  const newUsersResponse = await Promise.allSettled(
+    [...Array(parseInt(numberOfUsers, 10)).keys()]
+      .map(async (user, index) => {
+        const resRandomData = await axios.get('https://randomuser.me/api/')
+        const randomData = resRandomData.data?.results[0]
+
+        return {
+          id: index + indexAdjust,
+          name: `${randomData.name.first} ${randomData.name.last}`,
+          email: randomData.email,
+          phone: randomData.phone,
+          birthday: randomData.dob.date
+        }
+      })
+  )
+
+  const newUsers = newUsersResponse
+    .filter(newUser => newUser.status === 'fulfilled')
+    .map(newUser => newUser.value)
+
+  const updatedUsersDatabase = usersDatabase.concat(newUsers)
+  writeDatabase('users', updatedUsersDatabase)
+
+  ctx.body = newUsers
+  await next()
 }
 
 export default PostCreateUsers
