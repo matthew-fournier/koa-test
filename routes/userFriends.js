@@ -3,17 +3,21 @@ import { readDatabase, writeDatabase } from '../helpers/fsDatabase.js'
 
 const router = new Router({ prefix: '/user/:userID/friends' })
 
-// router.get('/', async (ctx, next) => {
-//   const usersDatabase = readDatabase('users')
-//   const userLookupID = Number(ctx.params.userID)
-//   const matchedUser = usersDatabase.find(user => user.id === userLookupID)
+router.get('/', async (ctx, next) => {
+  const usersDatabase = readDatabase('users')
+  const friendsDatabase = readDatabase('friends')
+  const userLookupID = Number(ctx.params.userID)
+  const matchedUser = usersDatabase.find(user => user.id === userLookupID)
+  if (typeof matchedUser === 'undefined') {
+    throw Error(`No user found with id ${userLookupID}`)
+  }
 
-//   if (typeof matchedUser === 'undefined') {
-//     throw Error(`No user found with id ${userLookupID}`)
-//   }
+  const matchedFriendships = friendsDatabase.filter(relationship =>
+    (relationship.userIdA === matchedUser.id || relationship.userIdB === matchedUser.id)
+  )
 
-//   ctx.body = matchedUser
-// })
+  ctx.body = matchedFriendships
+})
 
 router.post('/', async (ctx, next) => {
   const { friendId } = ctx.request.body

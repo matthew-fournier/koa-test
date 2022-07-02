@@ -14,10 +14,10 @@ router.post('/', async (ctx, next) => {
   if (
     typeof numberOfUsers === 'undefined' ||
     !numberOfUsers ||
-    Number(numberOfUsers) > 15
+    Number(numberOfUsers) > 3
     || Number(numberOfUsers) < 1
   ) {
-    throw Error('numberOfUsers must be a number from 1 - 15')
+    throw Error('numberOfUsers must be a number from 1 - 3')
   }
 
   const usersDatabase = readDatabase('users')

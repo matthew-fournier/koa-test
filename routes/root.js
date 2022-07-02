@@ -18,7 +18,7 @@ router.get('/', async (ctx, next) => {
         POST /users - Creates 'numberOfUsers' of new users & Returns new users
         <br>Body Data
         <ul>
-          <li>numberOfUsers: 1 - 15</li>
+          <li>numberOfUsers: 1 - 3</li>
         </ul>
       </li>
       <li>DELETE /users - Deletes all users</li>
