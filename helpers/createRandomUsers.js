@@ -16,7 +16,6 @@ const createRandomUsers = async (numberOfUsers, indexAdjust) => {
         }
       })
   ).then((res) => {
-    console.log(res)
     return res
       .filter(newUser => newUser.status === 'fulfilled')
       .map(newUser => newUser.value)
