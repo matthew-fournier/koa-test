@@ -6,7 +6,16 @@ const router = new Router({ prefix: '/users' })
 
 router.get('/', async (ctx, next) => {
   const usersDatabase = readDatabase('users')
-  ctx.body = usersDatabase
+  const { search } = ctx.query
+
+  ctx.body = (typeof search === 'undefined' || search.length === 0)
+    ? usersDatabase
+    : usersDatabase.filter(user =>
+      (
+        user.name.indexOf(search) !== -1 ||
+        user.email.indexOf(search) !== -1
+      )
+    )
 })
 
 router.post('/', async (ctx, next) => {

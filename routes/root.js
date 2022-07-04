@@ -14,6 +14,7 @@ router.get('/', async (ctx, next) => {
     <h4>Users</h4>
     <ul>
       <li>GET /users - Returns list of all users</li>
+      <li>GET /users?search=:searchString - Returns list of all users where 'name' or 'email' contain searchString</li>
       <li>
         POST /users - Creates 'numberOfUsers' of new users & Returns new users
         <br>Body Data
