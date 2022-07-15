@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { Pool, Client } from 'pg'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import Router from 'koa-router'
@@ -30,7 +30,46 @@ routes.forEach(route => {
   app.use(route.routes())
 })
 
+
+const credentials = {
+  user: "postgres",
+  host: "localhost",
+  database: "Test",
+  password: "Deadpool1992",
+  port: 5432,
+};
+
+const client = new Client(credentials)
+client.connect()
+
+
+client.query('SELECT name FROM teams', (err, res) => {
+  console.log(res.rows)
+})
+
+
+const text = 'INSERT INTO teams(name) VALUES($1) RETURNING *'
+const values = ['brianec']
+client.query(text, values, (err, res) => {
+  if (err) {
+    console.log(err.stack)
+  } else {
+    console.log(res.rows[0])
+    // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
+  }
+})
+
+
+// pool.query('INSERT INTO teams(name) VALUES ($hotdog)', ['hotdog'],  function(err, res) {
+//   if(err) {
+//       return console.error('error running query', err);
+//   }
+//   console.log(res);
+// });
+
+
+
 // Run App
-const port = 3000
+const port = 3030
 app.listen(port)
 console.log(`Running on: http://localhost:${port}/`)
